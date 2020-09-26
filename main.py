@@ -5,6 +5,8 @@ folder_name = 'Securities/'
 stock = input('Enter name of stock: ').strip()
 df = ai.pd.read_csv(r'%s' % (folder_name + stock + '.NS.csv'))
 
+min_option_strike_ticker = int(input('Min option ticker: '))
+
 closing_prices = df.loc[:, 'Close']
 count = 0
 
@@ -159,7 +161,7 @@ print(dict(sorted(grandpa_dict.items(), key=ai.o.itemgetter(1),reverse=True)))''
 
 # CODE TO FIND DETAILS OF A PARTICULAR DUAL EMA CROSSOVER STRATEGY
 
-abc = int(input('Enter lower EMA: '))
+'''abc = int(input('Enter lower EMA: '))
 xyz= int(input('Enter higher EMA: '))
 m1 = TS.EMA(abc, closing_prices_array)
 m2 = TS.EMA(xyz, closing_prices_array)
@@ -197,4 +199,37 @@ print('Cumulative profit percentage of strategy: ')
 print((cumulative_profit_multiplier-1)*100)
 print(abc, 'cross', xyz)
 print('Sorted array is: ')
-print(ai.np.sort(profit_percentage_array))
+print(ai.np.sort(profit_percentage_array))'''
+
+# CODE TO CALCULATE MOVEMENT EVERY "TRADE_DAYS" FOR THE SECURITY
+
+'''x = int(input('Enter number of days left for option expiry: '))
+print('---------------------')
+print('The average Nifty movement in every',x,'days historically has been: ')
+movement_array = TS.movement(x, closing_prices_array)
+print(ai.np.average(movement_array))
+print('max one period jump is: ',(ai.np.max(movement_array)))
+print('min one period jump is: ',(ai.np.min(movement_array)))'''
+
+# CODE TO FIND IF PRESENTLY SECURITY IS IN BUY OR SELL USING BOLLINGER BANDS:
+
+if ((closing_prices_array[-1]-TS.Bollinger_Bands(20,2,closing_prices_array)[1][-1]) / (TS.Bollinger_Bands(20,2,closing_prices_array)[0][-1]-TS.Bollinger_Bands(20,2,closing_prices_array)[1][-1])< 0.25):
+  print ('Overbought!!')
+  print('1. Bear Call Spread')
+  client_limit_prediction = TS.Bollinger_Bands(20, 3, closing_prices_array)[1][-1]
+  sell_strike = (int((client_limit_prediction + 49) / 50) * 50)
+  buy_strike = sell_strike + (2 * min_option_strike_ticker)
+  print('Buy', buy_strike, 'Call Option')
+  print('Sell', sell_strike, 'Call Option')
+  print('-----------------------------------')
+
+
+elif ((closing_prices_array[-1]-TS.Bollinger_Bands(20,2,closing_prices_array)[2][-1]) / (TS.Bollinger_Bands(20,2,closing_prices_array)[0][-1]-TS.Bollinger_Bands(20,2,closing_prices_array)[2][-1])< 0.25):
+  print('Oversold!!')
+  print('1. Bull Put Spread')
+  client_limit_prediction = TS.Bollinger_Bands(20,3,closing_prices_array)[2][-1]
+  sell_strike = (int(client_limit_prediction / 50) * 50)
+  buy_strike = sell_strike - (2 * min_option_strike_ticker)
+  print('Buy', buy_strike, 'Put Option')
+  print('Sell', sell_strike, 'Put Option')
+  print('-----------------------------------')
