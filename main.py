@@ -213,11 +213,11 @@ print('min one period jump is: ',(ai.np.min(movement_array)))'''
 
 # CODE TO FIND IF PRESENTLY SECURITY IS IN BUY OR SELL USING BOLLINGER BANDS:
 
-if ((closing_prices_array[-1]-TS.Bollinger_Bands(20,2,closing_prices_array)[1][-1]) / (TS.Bollinger_Bands(20,2,closing_prices_array)[0][-1]-TS.Bollinger_Bands(20,2,closing_prices_array)[1][-1])< 0.25):
+'''if ((closing_prices_array[-1]-TS.Bollinger_Bands(20,2,closing_prices_array)[1][-1]) / (TS.Bollinger_Bands(20,2,closing_prices_array)[0][-1]-TS.Bollinger_Bands(20,2,closing_prices_array)[1][-1])< 0.25):
   print ('Overbought!!')
-  print('1. Bear Call Spread')
+  print('Bear Call Spread')
   client_limit_prediction = TS.Bollinger_Bands(20, 3, closing_prices_array)[1][-1]
-  sell_strike = (int((client_limit_prediction + 49) / 50) * 50)
+  sell_strike = (int((client_limit_prediction + (min_option_strike_ticker-1)) / (min_option_strike_ticker)) * (min_option_strike_ticker))
   buy_strike = sell_strike + (2 * min_option_strike_ticker)
   print('Buy', buy_strike, 'Call Option')
   print('Sell', sell_strike, 'Call Option')
@@ -226,10 +226,45 @@ if ((closing_prices_array[-1]-TS.Bollinger_Bands(20,2,closing_prices_array)[1][-
 
 elif ((closing_prices_array[-1]-TS.Bollinger_Bands(20,2,closing_prices_array)[2][-1]) / (TS.Bollinger_Bands(20,2,closing_prices_array)[0][-1]-TS.Bollinger_Bands(20,2,closing_prices_array)[2][-1])< 0.25):
   print('Oversold!!')
-  print('1. Bull Put Spread')
+  print('Bull Put Spread')
   client_limit_prediction = TS.Bollinger_Bands(20,3,closing_prices_array)[2][-1]
-  sell_strike = (int(client_limit_prediction / 50) * 50)
+  sell_strike = (int(client_limit_prediction / (min_option_strike_ticker)) * (min_option_strike_ticker))
   buy_strike = sell_strike - (2 * min_option_strike_ticker)
   print('Buy', buy_strike, 'Put Option')
   print('Sell', sell_strike, 'Put Option')
   print('-----------------------------------')
+
+elif(TS.Bollinger_Bands(20, 2, closing_prices_array)[1][-1]/TS.Bollinger_Bands(20, 2, closing_prices_array)[2][-1]>1.05):
+  print('Iron Condor')
+  client_limit_prediction = TS.Bollinger_Bands(20, 1.5, closing_prices_array)[1][-1]
+  sell_strike = (int((client_limit_prediction + (min_option_strike_ticker - 1)) / (min_option_strike_ticker)) * (min_option_strike_ticker))
+  buy_strike = sell_strike + (2 * min_option_strike_ticker)
+  print('Buy', buy_strike, 'Call Option')
+  print('Sell', sell_strike, 'Call Option')
+  client_limit_prediction = TS.Bollinger_Bands(20, 1.5, closing_prices_array)[2][-1]
+  sell_strike = (int(client_limit_prediction / (min_option_strike_ticker)) * (min_option_strike_ticker))
+  buy_strike = sell_strike - (2 * min_option_strike_ticker)
+  print('Buy', buy_strike, 'Put Option')
+  print('Sell', sell_strike, 'Put Option')
+  print('-----------------------------------')
+
+elif(TS.Bollinger_Bands(20, 2, closing_prices_array)[1][-1]/TS.Bollinger_Bands(20, 2, closing_prices_array)[2][-1]<1.05):
+  print('Iron Condor')
+  client_limit_prediction = TS.Bollinger_Bands(20, 3, closing_prices_array)[1][-1]
+  sell_strike = (int((client_limit_prediction + (min_option_strike_ticker - 1)) / (min_option_strike_ticker)) * (min_option_strike_ticker))
+  buy_strike = sell_strike + (2 * min_option_strike_ticker)
+  print('Buy', buy_strike, 'Call Option')
+  print('Sell', sell_strike, 'Call Option')
+  client_limit_prediction = TS.Bollinger_Bands(20, 3, closing_prices_array)[2][-1]
+  sell_strike = (int(client_limit_prediction / (min_option_strike_ticker)) * (min_option_strike_ticker))
+  buy_strike = sell_strike - (2 * min_option_strike_ticker)
+  print('Buy', buy_strike, 'Put Option')
+  print('Sell', sell_strike, 'Put Option')
+  print('-----------------------------------')
+
+
+print('NIFTY Spot Price: ',closing_prices_array[-1])'''
+
+#CODE TO PREDICT RANGE OF STOCK USING INDIA VIX
+
+'''print(TS.VIX(22.42, 7, 14371.90))'''

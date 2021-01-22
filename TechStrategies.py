@@ -24,7 +24,6 @@ def movement(trade_days, closing_prices_array, ):
     return move_array
 
 #Strategy 4: Bollinger Bands
-
 def Bollinger_Bands(middle_sma, standard_deviation_coefficient, closing_prices_array):
     middle_band_array = SMA(middle_sma, closing_prices_array)
     variance_array = ai.np.array([1])
@@ -39,3 +38,10 @@ def Bollinger_Bands(middle_sma, standard_deviation_coefficient, closing_prices_a
     upper_band_array = middle_band_array + (standard_deviation_coefficient*standard_deviation_array)
     lower_band_array = middle_band_array - (standard_deviation_coefficient*standard_deviation_array)
     return [middle_band_array, upper_band_array, lower_band_array]
+
+#Strategy 5: VIX Calculator
+def VIX(IndVix, days_to_expiry, spot_price):
+    max_move= (IndVix*((days_to_expiry**0.5)/(365**0.5))*spot_price)/100
+    lower_limit=spot_price-max_move
+    upper_limit=spot_price+max_move
+    return (round(lower_limit), round(upper_limit))
